@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="primaryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1" />
+      <stop offset="50%" stop-color="#8b5cf6" />
+      <stop offset="100%" stop-color="#ec4899" />
+    </linearGradient>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e1b4b" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="url(#bgGrad)" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" />
+  <!-- Academic / Course Cap & Dashboard Motif -->
+  <path d="M32 14L52 24L32 34L12 24L32 14Z" fill="url(#primaryGrad)" filter="url(#glow)" />
+  <path d="M20 29.5V40.5C20 44 25.37 47 32 47C38.63 47 44 44 44 40.5V29.5" stroke="#a5b4fc" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M48 27V41" stroke="#ec4899" stroke-width="3" stroke-linecap="round" />
+  <circle cx="48" cy="43" r="2.5" fill="#f43f5e" />
+</svg>

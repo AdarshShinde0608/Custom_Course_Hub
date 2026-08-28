@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="description" content="Custom Course Hub - Direct high-speed navigation dashboard for Moodle courses with Theory, Lab, and Project portals." />
+  <meta name="theme-color" content="#0b0f19" />
+  <title>Custom Course Hub | Moodle Dashboard</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body>
+  <!-- Ambient background illumination -->
+  <div class="ambient-glow"></div>
+  <div class="ambient-glow-secondary"></div>
+
+  <!-- Dashboard Application Shell -->
+  <div class="dashboard-app">
+
+    <!-- Header Section -->
+    <header class="site-header">
+      <div class="header-brand">
+        <div class="brand-icon-wrapper" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+            <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+          </svg>
+        </div>
+        <div class="brand-info">
+          <h1 class="brand-title">Course Hub</h1>
+          <div class="brand-subtitle">
+            <span>MIT Academy of Engineering</span>
+            <span class="brand-badge">SEM-IV • 2025-26</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Embed Snippet Generator Trigger -->
+        <button class="btn-primary" id="btn-open-embed-modal" title="Get iframe code for Moodle Text Block">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
+          <span>Embed in Moodle</span>
+        </button>
+
+        <!-- Course Manager Trigger -->
+        <button class="btn-secondary" id="btn-open-manager-modal" title="Manage Courses & Export">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 20h9"></path>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+          </svg>
+          <span>Manage</span>
+        </button>
+
+        <!-- Dark/Light Theme Toggle -->
+        <button class="btn-icon" id="btn-theme-toggle" title="Switch Theme" aria-label="Toggle theme">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Controls & Filter Section -->
+    <section class="controls-panel" aria-label="Course filtering and search">
+      <div class="search-row">
+        <div class="search-input-wrapper">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input
+            type="text"
+            id="course-search-input"
+            class="search-input"
+            placeholder="Search courses, subject code, topic (e.g. DBMS, CS202, Java, Trees)..."
+            autocomplete="off"
+            aria-label="Search courses"
+          />
+          <button class="search-clear-btn" id="btn-clear-search" style="display: none;" title="Clear search" aria-label="Clear search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+          <span class="search-shortcut-badge" title="Press / anywhere to search">/</span>
+        </div>
+      </div>
+
+      <div class="filter-row">
+        <!-- Course Type Filter Pills -->
+        <div class="filter-pills" role="tablist" aria-label="Filter course types">
+          <button class="filter-pill active" data-filter-type="all">
+            <span>All Courses</span>
+            <span class="count-badge" data-filter-count="all">(6)</span>
+          </button>
+          <button class="filter-pill" data-filter-type="theory">
+            <span>Theory</span>
+            <span class="count-badge" data-filter-count="theory">(5)</span>
+          </button>
+          <button class="filter-pill" data-filter-type="lab">
+            <span>Labs</span>
+            <span class="count-badge" data-filter-count="lab">(4)</span>
+          </button>
+          <button class="filter-pill" data-filter-type="project">
+            <span>Projects</span>
+            <span class="count-badge" data-filter-count="project">(1)</span>
+          </button>
+        </div>
+
+        <!-- View Mode Switcher -->
+        <div class="view-switcher" role="group" aria-label="Toggle layout view">
+          <button class="view-btn active" id="btn-view-grid" title="Grid View" aria-label="Grid layout">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+          </button>
+          <button class="view-btn" id="btn-view-list" title="Compact List View" aria-label="List layout">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="8" y1="6" x2="21" y2="6"></line>
+              <line x1="8" y1="12" x2="21" y2="12"></line>
+              <line x1="8" y1="18" x2="21" y2="18"></line>
+              <line x1="3" y1="6" x2="3.01" y2="6"></line>
+              <line x1="3" y1="12" x2="3.01" y2="12"></line>
+              <line x1="3" y1="18" x2="3.01" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats Bar -->
+    <div class="results-info-bar">
+      <span id="results-count">Showing all 6 courses</span>
+      <span>Click any action to open directly in Moodle</span>
+    </div>
+
+    <!-- Course Cards Grid Container -->
+    <main id="courses-grid-container" class="courses-grid" aria-label="Course List">
+      <!-- Dynamic course cards injected via renderer.js -->
+    </main>
+
+  </div>
+
+  <!-- MODAL: Embed in Moodle -->
+  <div class="modal-overlay" id="modal-embed" role="dialog" aria-modal="true" aria-labelledby="embed-modal-title">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h2 class="modal-title" id="embed-modal-title">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 18 22 12 16 6"></polyline>
+            <polyline points="8 6 2 12 8 18"></polyline>
+          </svg>
+          <span>Embed Dashboard in Moodle</span>
+        </h2>
+        <button class="modal-close-btn" data-action="close-modal" aria-label="Close dialog">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6;">
+          Paste this single iframe snippet into your Moodle <strong>Text / HTML block</strong>. All future course updates in this repository will automatically reflect inside your Moodle dashboard without touching Moodle again!
+        </p>
+
+        <div class="form-group">
+          <label class="form-label" for="embed-height-input">Iframe Height (px)</label>
+          <input type="number" id="embed-height-input" class="form-input" value="750" min="400" max="1500" step="50" />
+        </div>
+
+        <div class="form-group">
+          <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; color: var(--text-primary); cursor: pointer;">
+            <input type="checkbox" id="embed-mode-checkbox" checked />
+            <span>Enable Compact Embed Mode (optimizes padding & hides outer ambient effects)</span>
+          </label>
+        </div>
+
+        <div class="code-block-wrapper">
+          <pre class="code-snippet"><code id="embed-code-snippet"></code></pre>
+          <button class="btn-copy" id="btn-copy-embed-code" title="Copy to clipboard">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span>Copy Snippet</span>
+          </button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" data-action="close-modal">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Course Manager -->
+  <div class="modal-overlay" id="modal-manager" role="dialog" aria-modal="true" aria-labelledby="manager-modal-title">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h2 class="modal-title" id="manager-modal-title">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 20h9"></path>
+            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+          </svg>
+          <span>Manage Courses & Export</span>
+        </h2>
+        <button class="modal-close-btn" data-action="close-modal" aria-label="Close dialog">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Add Course Form -->
+        <form id="form-add-course" style="display: flex; flex-direction: column; gap: 1rem;">
+          <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-primary);">Add New Course</h3>
+
+          <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 0.75rem;">
+            <div class="form-group">
+              <label class="form-label" for="new-course-code">Course Code</label>
+              <input type="text" id="new-course-code" class="form-input" placeholder="e.g. CS205" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="new-course-title">Course Title</label>
+              <input type="text" id="new-course-title" class="form-input" placeholder="e.g. Computer Networks" required />
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem;">
+            <div class="form-group">
+              <label class="form-label" for="new-course-sem">Semester</label>
+              <select id="new-course-sem" class="form-select">
+                <option value="SEM-IV">SEM-IV</option>
+                <option value="SEM-III">SEM-III</option>
+                <option value="SEM-V">SEM-V</option>
+                <option value="SEM-VI">SEM-VI</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="new-course-type">Type</label>
+              <select id="new-course-type" class="form-select">
+                <option value="Theory + Lab">Theory + Lab</option>
+                <option value="Theory">Theory Only</option>
+                <option value="Lab">Lab Only</option>
+                <option value="Project">Project</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="new-course-theme">Theme Color</label>
+              <select id="new-course-theme" class="form-select">
+                <option value="indigo">Indigo Blue</option>
+                <option value="emerald">Emerald Green</option>
+                <option value="purple">Violet Purple</option>
+                <option value="amber">Amber Orange</option>
+                <option value="cyan">Sky Cyan</option>
+                <option value="rose">Rose Pink</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+            <div class="form-group">
+              <label class="form-label" for="new-course-theory-id">Moodle Theory ID (optional)</label>
+              <input type="number" id="new-course-theory-id" class="form-input" placeholder="e.g. 5925" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="new-course-lab-id">Moodle Lab ID (optional)</label>
+              <input type="number" id="new-course-lab-id" class="form-input" placeholder="e.g. 5926" />
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary" style="justify-content: center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <span>Add Course</span>
+          </button>
+        </form>
+
+        <hr style="border: 0; border-top: 1px solid var(--border-subtle); margin: 0.5rem 0;" />
+
+        <!-- Export & Reset Controls -->
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-primary);">Backup & Repository Sync</h3>
+          <p style="font-size: 0.85rem; color: var(--text-secondary);">
+            Export your updated course list as <code>courses.json</code> and commit it to your GitHub repository to update all devices.
+          </p>
+          <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+            <button class="btn-secondary" id="btn-export-courses-json">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>Download courses.json</span>
+            </button>
+            <button class="btn-secondary" id="btn-reset-default-courses" style="color: var(--theme-rose-primary);">
+              <span>Reset Defaults</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" data-action="close-modal">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" aria-live="polite"></div>
+
+  <!-- Scripts in dependency order -->
+  <script src="js/config.js"></script>
+  <script src="js/renderer.js"></script>
+  <script src="js/filters.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="js/modal.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
