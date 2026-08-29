@@ -19,26 +19,5 @@
       }
     ],
     "isFavorite": false
-  },
-  {
-    "id": "sy-project",
-    "code": "PR201",
-    "title": "Second Year Capstone Project",
-    "semester": "SEM-IV",
-    "academicYear": "2025-26",
-    "type": "Project",
-    "theme": "rose",
-    "icon": "sparkles",
-    "instructor": "Project Review Committee",
-    "description": "Team project applying engineering principles to real-world software and hardware problem statements.",
-    "links": [
-      {
-        "name": "Project Portal",
-        "url": "http://moodle.mitaoe.ac.in/course/view.php?id=5920",
-        "badge": "Submissions",
-        "type": "project"
-      }
-    ],
-    "isFavorite": false
   }
 ]
