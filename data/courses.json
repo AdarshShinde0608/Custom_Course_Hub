@@ -24,7 +24,7 @@
         "type": "lab"
       }
     ],
-    "isFavorite": true
+    "isFavorite": false
   },
   {
     "id": "oop-java",
@@ -45,7 +45,7 @@
         "type": "lab"
       }
     ],
-    "isFavorite": true
+    "isFavorite": false
   },
   {
     "id": "ads",
@@ -72,7 +72,7 @@
         "type": "lab"
       }
     ],
-    "isFavorite": true
+    "isFavorite": false
   },
   {
     "id": "eng-informatics",
