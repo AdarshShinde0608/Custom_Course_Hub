@@ -90,12 +90,14 @@ body.embed-mode .ambient-glow-secondary {
   display: none;
 }
 body.embed-mode .courses-grid {
-  grid-template-columns: repeat(2, 1fr);
-  gap: 0.65rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 350px));
+  gap: 0.85rem;
+  justify-content: start;
 }
 body.embed-mode .course-card {
-  padding: 0.85rem;
-  border-radius: var(--radius-md);
+  max-width: 350px;
+  padding: 1.15rem;
+  border-radius: var(--radius-lg);
 }
 body.embed-mode .course-card::before {
   height: 2px;
@@ -107,8 +109,8 @@ body.embed-mode .card-title {
   font-size: 0.9rem;
 }
 body.embed-mode .course-desc {
-  font-size: 0.78rem;
-  -webkit-line-clamp: 2;
+  font-size: 0.82rem;
+  -webkit-line-clamp: 3;
 }
 body.embed-mode .card-body {
   margin: 0.35rem 0 0.65rem;
@@ -445,8 +447,9 @@ body.embed-mode .view-switcher {
 /* Course Grid */
 .courses-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 0.85rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 350px));
+  gap: 1rem;
+  justify-content: start;
 }
 
 /* List View Variant */
@@ -458,13 +461,16 @@ body.embed-mode .view-switcher {
 /* Course Card — minimal flat style */
 .course-card {
   position: relative;
-  background: var(--bg-card);
+  width: 100%;
+  max-width: 350px;
+  background: var(--bg-secondary);
   border: 1px solid var(--border-card);
-  border-radius: var(--radius-md);
-  padding: 1rem;
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  min-height: 220px;
   overflow: hidden;
   transition: border-color var(--transition-fast);
 }
@@ -480,7 +486,7 @@ body.embed-mode .view-switcher {
   top: 0;
   left: 0;
   right: 0;
-  height: 2px;
+  height: 3px;
   background: var(--card-stripe-gradient, var(--brand-gradient));
 }
 
@@ -622,11 +628,11 @@ body.embed-mode .view-switcher {
 }
 
 .course-desc {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: var(--text-secondary);
-  line-height: 1.5;
+  line-height: 1.55;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -634,24 +640,35 @@ body.embed-mode .view-switcher {
 /* Card Actions / Buttons Row */
 .card-actions {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-  gap: 0.65rem;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 0.6rem;
   margin-top: auto;
+}
+
+/* Single action button — centered like screenshot */
+.card-actions:has(.course-btn:only-child) {
+  display: flex;
+  justify-content: center;
+}
+
+.card-actions:has(.course-btn:only-child) .course-btn {
+  flex: 0 1 auto;
+  min-width: 130px;
 }
 
 .course-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.45rem;
-  padding: 0.65rem 0.9rem;
-  font-size: 0.85rem;
+  gap: 0.4rem;
+  padding: 0.55rem 0.85rem;
+  font-size: 0.82rem;
   font-weight: 600;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-full);
   border: 1px solid var(--border-subtle);
   background: var(--bg-input);
   color: var(--text-primary);
-  transition: all var(--transition-fast);
+  transition: background var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
   position: relative;
   overflow: hidden;
 }
@@ -737,6 +754,8 @@ body.embed-mode .view-switcher {
   flex-direction: row;
   align-items: center;
   padding: 1rem 1.5rem;
+  max-width: 100%;
+  min-height: auto;
 }
 .courses-grid.list-view .card-header {
   margin-bottom: 0;
@@ -1012,14 +1031,12 @@ body.embed-mode .view-switcher {
     align-items: flex-start;
   }
   .courses-grid {
-    grid-template-columns: 1fr;
-  }
-  body.embed-mode .courses-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 350px));
   }
   .courses-grid.list-view .course-card {
     flex-direction: column;
     align-items: flex-start;
+    max-width: 100%;
   }
   .courses-grid.list-view .card-actions {
     width: 100%;
@@ -1027,7 +1044,7 @@ body.embed-mode .view-switcher {
 }
 
 @media (max-width: 420px) {
-  body.embed-mode .courses-grid {
-    grid-template-columns: 1fr;
+  .course-card {
+    max-width: 100%;
   }
 }
