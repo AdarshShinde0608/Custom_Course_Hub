@@ -1,5 +1,7 @@
 /* Custom Course Hub Dashboard Styling */
 
+/* HIIII */
+
 body {
   font-family: var(--font-sans);
   background-color: var(--bg-primary);
@@ -91,13 +93,13 @@ body.embed-mode .ambient-glow-secondary {
 }
 body.embed-mode .courses-grid {
   width: 100%;
-  grid-template-columns: repeat(2, minmax(0, 350px));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.85rem;
-  justify-content: start;
+  justify-content: stretch;
 }
 body.embed-mode .course-card {
   width: 100%;
-  max-width: 350px;
+  max-width: none;
   padding: 1.15rem;
   border-radius: var(--radius-lg);
 }
