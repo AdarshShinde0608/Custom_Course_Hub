@@ -155,6 +155,27 @@ window.CourseHubConfig = {
         }
       ],
       isFavorite: false
+    },
+    {
+      id: "cis",
+      code: "JSL26-27",
+      title: "Cryptography and Information Security",
+      semester: "SEM-V",
+      academicYear: "2026-27",
+      type: "Elective",
+      theme: "purple",
+      icon: "activity",
+      instructor: "Dept. of Computer Engineering",
+      description: "Cryptographic algorithms, network security, authentication protocols, and information security principles.",
+      links: [
+        {
+          name: "Course Portal",
+          url: "https://moodle.mitaoe.ac.in/course/view.php?id=5920",
+          badge: "Elective",
+          type: "elective"
+        }
+      ],
+      isFavorite: false
     }
   ],
 

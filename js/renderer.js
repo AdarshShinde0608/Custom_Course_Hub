@@ -25,6 +25,9 @@ window.CourseRenderer = (function () {
         } else if (link.type === 'project') {
           btnClass += ' btn-project';
           btnIcon = icons.sparkles;
+        } else if (link.type === 'elective') {
+          btnClass += ' btn-elective';
+          btnIcon = icons.bookOpen;
         }
 
         return `

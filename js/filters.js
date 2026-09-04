@@ -78,9 +78,11 @@ window.CourseFilters = (function () {
       // 3. Type Filter Check
       if (state.selectedType !== 'all') {
         const cType = (course.type || '').toLowerCase();
-        if (state.selectedType === 'theory' && !cType.includes('theory')) return false;
-        if (state.selectedType === 'lab' && !cType.includes('lab')) return false;
-        if (state.selectedType === 'project' && !cType.includes('project')) return false;
+        const linkTypes = (course.links || []).map(l => (l.type || '').toLowerCase());
+        if (state.selectedType === 'theory' && !cType.includes('theory') && !linkTypes.includes('theory')) return false;
+        if (state.selectedType === 'lab' && !cType.includes('lab') && !linkTypes.includes('lab')) return false;
+        if (state.selectedType === 'project' && !cType.includes('project') && !linkTypes.includes('project')) return false;
+        if (state.selectedType === 'elective' && !cType.includes('elective') && !linkTypes.includes('elective')) return false;
       }
 
       // 4. Favorites Check
@@ -101,16 +103,17 @@ window.CourseFilters = (function () {
       theory: 0,
       lab: 0,
       project: 0,
-      sem4: 0,
+      elective: 0,
       favorites: 0
     };
 
     courses.forEach(c => {
       const type = (c.type || '').toLowerCase();
-      if (type.includes('theory')) counts.theory++;
-      if (type.includes('lab')) counts.lab++;
-      if (type.includes('project')) counts.project++;
-      if ((c.semester || '').toUpperCase() === 'SEM-IV') counts.sem4++;
+      const linkTypes = (c.links || []).map(l => (l.type || '').toLowerCase());
+      if (type.includes('theory') || linkTypes.includes('theory')) counts.theory++;
+      if (type.includes('lab') || linkTypes.includes('lab')) counts.lab++;
+      if (type.includes('project') || linkTypes.includes('project')) counts.project++;
+      if (type.includes('elective') || linkTypes.includes('elective')) counts.elective++;
       if (c.isFavorite) counts.favorites++;
     });
 

@@ -12,10 +12,88 @@
   // Application State
   const AppState = {
     courses: [],
-    viewMode: 'grid', // 'grid' | 'list'
-    theme: 'dark', // 'dark' | 'light'
+    viewMode: 'grid',
+    theme: 'dark',
+    isEmbed: false,
     containerEl: null
   };
+
+  const STORAGE_KEYS = {
+    favorites: 'course_hub_favorites',
+    customCourses: 'course_hub_custom_courses'
+  };
+
+  /**
+   * Load favorite flags from localStorage
+   */
+  function loadFavoritesMap() {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEYS.favorites) || '{}');
+    } catch {
+      return {};
+    }
+  }
+
+  /**
+   * Save a single favorite flag
+   */
+  function saveFavorite(courseId, isFavorite) {
+    const favorites = loadFavoritesMap();
+    favorites[courseId] = isFavorite;
+    localStorage.setItem(STORAGE_KEYS.favorites, JSON.stringify(favorites));
+  }
+
+  /**
+   * Load user-added courses from localStorage
+   */
+  function loadCustomCourses() {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEYS.customCourses) || '[]');
+    } catch {
+      return [];
+    }
+  }
+
+  /**
+   * Apply favorite flags from localStorage onto course list
+   */
+  function applyFavorites(courses) {
+    const favorites = loadFavoritesMap();
+    return courses.map(course => ({
+      ...course,
+      isFavorite: favorites[course.id] !== undefined ? favorites[course.id] : !!course.isFavorite
+    }));
+  }
+
+  /**
+   * Merge base courses with custom local courses (dedupe by id)
+   */
+  function mergeCourses(baseCourses, customCourses) {
+    const merged = [...baseCourses];
+    const ids = new Set(baseCourses.map(c => c.id));
+    customCourses.forEach(course => {
+      if (!ids.has(course.id)) {
+        merged.push(course);
+        ids.add(course.id);
+      }
+    });
+    return merged;
+  }
+
+  /**
+   * Update header badge from course data
+   */
+  function updateHeaderBadge(courses) {
+    const badgeEl = document.getElementById('brand-semester-badge');
+    if (!badgeEl || !courses.length) return;
+
+    const semesters = [...new Set(courses.map(c => c.semester).filter(Boolean))];
+    const years = [...new Set(courses.map(c => c.academicYear).filter(Boolean))];
+
+    const semLabel = semesters.length === 1 ? semesters[0] : (semesters.length > 1 ? 'Multi-Sem' : config.defaultSemester);
+    const yearLabel = years.length === 1 ? years[0] : (years.length > 1 ? 'Multi-Year' : config.defaultAcademicYear);
+    badgeEl.textContent = `${semLabel} • ${yearLabel}`;
+  }
 
   /**
    * Initialize theme from localStorage or system preference
@@ -61,38 +139,45 @@
   }
 
   /**
-   * Load courses data with multi-tier fallback
+   * Load courses: always fetch JSON, overlay favorites & custom courses
    */
   async function loadCourses() {
-    // 1. Check if user has saved custom courses in localStorage
-    const savedCourses = localStorage.getItem('course_hub_custom_courses');
-    if (savedCourses) {
-      try {
-        AppState.courses = JSON.parse(savedCourses);
-        console.log('Loaded courses from localStorage cache');
-        updateUI();
-        return;
-      } catch (e) {
-        console.warn('Failed to parse cached courses, falling back to fetch/defaults');
-      }
-    }
+    let baseCourses = [];
 
-    // 2. Attempt fetching data/courses.json
     try {
       const res = await fetch(config.dataUrl);
       if (res.ok) {
-        AppState.courses = await res.json();
+        baseCourses = await res.json();
         console.log('Loaded courses from data/courses.json');
-        updateUI();
-        return;
       }
     } catch (e) {
-      console.warn('Fetch data/courses.json failed (likely file:// or offline), falling back to config defaults', e);
+      console.warn('Fetch data/courses.json failed, falling back to config defaults', e);
     }
 
-    // 3. Fallback to embedded default data in config.js
-    AppState.courses = [...config.defaultCourses];
-    console.log('Loaded courses from embedded default config');
+    if (!baseCourses.length) {
+      baseCourses = [...config.defaultCourses];
+      console.log('Loaded courses from embedded default config');
+    }
+
+    // Migrate legacy full-list localStorage override to favorites-only storage
+    const legacyRaw = localStorage.getItem(STORAGE_KEYS.customCourses);
+    if (legacyRaw && !localStorage.getItem(STORAGE_KEYS.favorites)) {
+      try {
+        const legacyCourses = JSON.parse(legacyRaw);
+        if (Array.isArray(legacyCourses) && legacyCourses.length > 0 && legacyCourses[0].title) {
+          const favorites = {};
+          legacyCourses.forEach(c => {
+            if (c.isFavorite) favorites[c.id] = true;
+          });
+          localStorage.setItem(STORAGE_KEYS.favorites, JSON.stringify(favorites));
+          localStorage.removeItem(STORAGE_KEYS.customCourses);
+        }
+      } catch { /* ignore */ }
+    }
+
+    const customCourses = loadCustomCourses();
+    AppState.courses = applyFavorites(mergeCourses(baseCourses, customCourses));
+    updateHeaderBadge(AppState.courses);
     updateUI();
   }
 
@@ -121,6 +206,7 @@
     setPillCount('[data-filter-count="theory"]', counts.theory);
     setPillCount('[data-filter-count="lab"]', counts.lab);
     setPillCount('[data-filter-count="project"]', counts.project);
+    setPillCount('[data-filter-count="elective"]', counts.elective);
   }
 
   /**
@@ -131,7 +217,7 @@
     if (!course) return;
 
     course.isFavorite = !course.isFavorite;
-    localStorage.setItem('course_hub_custom_courses', JSON.stringify(AppState.courses));
+    saveFavorite(courseId, course.isFavorite);
     updateUI();
     modal.showToast(course.isFavorite ? `Pinned "${course.title}" to top` : `Unpinned "${course.title}"`);
   }
@@ -201,6 +287,7 @@
       });
 
       btnListView.addEventListener('click', () => {
+        if (AppState.isEmbed) return;
         btnListView.classList.add('active');
         btnGridView.classList.remove('active');
         AppState.viewMode = 'list';
@@ -282,9 +369,9 @@
     if (btnResetCourses) {
       btnResetCourses.addEventListener('click', () => {
         if (confirm('Reset all course data back to factory defaults?')) {
-          localStorage.removeItem('course_hub_custom_courses');
-          AppState.courses = [...config.defaultCourses];
-          updateUI();
+          localStorage.removeItem(STORAGE_KEYS.favorites);
+          localStorage.removeItem(STORAGE_KEYS.customCourses);
+          loadCourses();
           modal.closeModal('modal-manager');
           modal.showToast('Reset courses to factory defaults!');
         }
@@ -346,7 +433,10 @@
         };
 
         AppState.courses.unshift(newCourse);
-        localStorage.setItem('course_hub_custom_courses', JSON.stringify(AppState.courses));
+        const customCourses = loadCustomCourses();
+        customCourses.unshift(newCourse);
+        localStorage.setItem(STORAGE_KEYS.customCourses, JSON.stringify(customCourses));
+        updateHeaderBadge(AppState.courses);
         updateUI();
         addCourseForm.reset();
         modal.closeModal('modal-manager');
@@ -376,12 +466,38 @@
   }
 
   /**
+   * Configure embed mode: compact UI, force 2-column grid
+   */
+  function applyEmbedMode() {
+    if (!AppState.isEmbed) return;
+
+    document.body.classList.add('embed-mode');
+
+    // Hide admin-only controls inside Moodle iframe
+    ['btn-open-embed-modal', 'btn-open-manager-modal'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
+
+    // Force grid view for side-by-side cards
+    AppState.viewMode = 'grid';
+    if (AppState.containerEl) {
+      AppState.containerEl.classList.remove('list-view');
+    }
+    const btnGrid = document.getElementById('btn-view-grid');
+    const btnList = document.getElementById('btn-view-list');
+    if (btnGrid) btnGrid.classList.add('active');
+    if (btnList) btnList.classList.remove('active');
+  }
+
+  /**
    * Handle embed query parameters
    */
   function handleQueryParams() {
     const params = navigation.parseQueryParams();
+    AppState.isEmbed = params.isEmbed;
     if (params.isEmbed) {
-      document.body.classList.add('embed-mode');
+      applyEmbedMode();
     }
     if (params.search) {
       const searchInput = document.getElementById('course-search-input');
