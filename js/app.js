@@ -20,8 +20,28 @@
 
   const STORAGE_KEYS = {
     favorites: 'course_hub_favorites',
-    customCourses: 'course_hub_custom_courses'
+    customCourses: 'course_hub_custom_courses',
+    selectedSemester: 'course_hub_selected_semester'
   };
+
+  /**
+   * Load the last selected semester from localStorage
+   */
+  function loadSelectedSemester() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEYS.selectedSemester);
+      return saved || 'all';
+    } catch {
+      return 'all';
+    }
+  }
+
+  /**
+   * Save the selected semester to localStorage
+   */
+  function saveSelectedSemester(semester) {
+    localStorage.setItem(STORAGE_KEYS.selectedSemester, semester || 'all');
+  }
 
   /**
    * Load favorite flags from localStorage
@@ -269,7 +289,9 @@
     const semFilter = document.getElementById('select-semester');
     if (semFilter) {
       semFilter.addEventListener('change', (e) => {
-        filters.setSemester(e.target.value);
+        const selectedSemester = e.target.value;
+        filters.setSemester(selectedSemester);
+        saveSelectedSemester(selectedSemester);
         updateUI();
       });
     }
@@ -316,7 +338,11 @@
           if (searchInput) searchInput.value = '';
           if (clearSearchBtn) clearSearchBtn.style.display = 'none';
           filterPills.forEach(p => p.classList.toggle('active', p.getAttribute('data-filter-type') === 'all'));
-          if (semFilter) semFilter.value = 'all';
+          if (semFilter) {
+            semFilter.value = 'all';
+            saveSelectedSemester('all');
+          }
+          filters.setSemester('all');
           updateUI();
         }
       });
@@ -504,11 +530,12 @@
       if (searchInput) searchInput.value = params.search;
       filters.setSearchQuery(params.search);
     }
-    if (params.semester) {
-      const semFilter = document.getElementById('select-semester');
-      if (semFilter) semFilter.value = params.semester;
-      filters.setSemester(params.semester);
-    }
+
+    const selectedSemester = params.semester || loadSelectedSemester();
+    const semFilter = document.getElementById('select-semester');
+    if (semFilter) semFilter.value = selectedSemester;
+    filters.setSemester(selectedSemester);
+    saveSelectedSemester(selectedSemester);
   }
 
   /**
