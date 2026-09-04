@@ -90,11 +90,13 @@ body.embed-mode .ambient-glow-secondary {
   display: none;
 }
 body.embed-mode .courses-grid {
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 350px));
+  width: 100%;
+  grid-template-columns: repeat(2, minmax(0, 350px));
   gap: 0.85rem;
   justify-content: start;
 }
 body.embed-mode .course-card {
+  width: 100%;
   max-width: 350px;
   padding: 1.15rem;
   border-radius: var(--radius-lg);
@@ -447,9 +449,10 @@ body.embed-mode .view-switcher {
 /* Course Grid */
 .courses-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 350px));
+  width: 100%;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1rem;
-  justify-content: start;
+  justify-content: stretch;
 }
 
 /* List View Variant */
@@ -462,7 +465,7 @@ body.embed-mode .view-switcher {
 .course-card {
   position: relative;
   width: 100%;
-  max-width: 350px;
+  max-width: 100%;
   background: var(--bg-secondary);
   border: 1px solid var(--border-card);
   border-radius: var(--radius-lg);
@@ -1031,7 +1034,13 @@ body.embed-mode .view-switcher {
     align-items: flex-start;
   }
   .courses-grid {
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 350px));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  }
+  body.embed-mode .courses-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  body.embed-mode .course-card {
+    max-width: 350px;
   }
   .courses-grid.list-view .course-card {
     flex-direction: column;
@@ -1044,6 +1053,12 @@ body.embed-mode .view-switcher {
 }
 
 @media (max-width: 420px) {
+  .courses-grid {
+    grid-template-columns: 1fr;
+  }
+  body.embed-mode .courses-grid {
+    grid-template-columns: 1fr;
+  }
   .course-card {
     max-width: 100%;
   }
