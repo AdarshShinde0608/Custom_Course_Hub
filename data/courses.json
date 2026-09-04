@@ -149,17 +149,125 @@
     "title": "Cryptography and Information Security",
     "semester": "SEM-V",
     "academicYear": "2026-27",
-    "type": "Elective",
+    "type": "Theory + Lab",
     "theme": "purple",
     "icon": "activity",
     "instructor": "Dept. of Computer Engineering",
     "description": "Cryptographic algorithms, network security, authentication protocols, and information security principles.",
     "links": [
       {
-        "name": "Course Portal",
-        "url": "https://moodle.mitaoe.ac.in/course/view.php?id=5920",
-        "badge": "Elective",
-        "type": "elective"
+        "name": "Theory",
+        "url": "https://moodle.mitaoe.ac.in/course/view.php?id=6470",
+        "badge": "Lecture",
+        "type": "theory"
+      },
+      {
+        "name": "Lab",
+        "url": "https://moodle.mitaoe.ac.in/course/view.php?id=6605",
+        "badge": "Practical",
+        "type": "lab"
+      }
+    ],
+    "isFavorite": false
+  },
+  {
+    "id": "software-architecture-mdm",
+    "code": "2310331",
+    "title": "Software Architecture (MDM)",
+    "semester": "SEM-V",
+    "academicYear": "2026-27",
+    "type": "Theory + Lab",
+    "theme": "indigo",
+    "icon": "layers",
+    "instructor": "Dept. of Computer Engineering",
+    "description": "Architecture styles, software design principles, quality attributes, and system-level modeling for modern applications.",
+    "links": [
+      {
+        "name": "Theory",
+        "url": "https://moodle.mitaoe.ac.in/course/view.php?id=6660",
+        "badge": "Lecture",
+        "type": "theory"
+      },
+      {
+        "name": "Lab",
+        "url": "https://moodle.mitaoe.ac.in/course/view.php?id=6661",
+        "badge": "Practical",
+        "type": "lab"
+      }
+    ],
+    "isFavorite": false
+  },
+  {
+    "id": "computer-networks",
+    "code": "2304312",
+    "title": "Computer Networks",
+    "semester": "SEM-V",
+    "academicYear": "2026-27",
+    "type": "Theory + Lab",
+    "theme": "cyan",
+    "icon": "network",
+    "instructor": "Dept. of Computer Engineering",
+    "description": "Layered networking models, routing, switching, protocols, and practical network configuration and analysis.",
+    "links": [
+      {
+        "name": "Theory",
+        "url": "https://moodle.mitaoe.ac.in/course/view.php?id=6562",
+        "badge": "Lecture",
+        "type": "theory"
+      },
+      {
+        "name": "Lab",
+        "url": "https://moodle.mitaoe.ac.in/course/view.php?id=6469",
+        "badge": "Practical",
+        "type": "lab"
+      }
+    ],
+    "isFavorite": false
+  },
+  {
+    "id": "linux-administration-lab",
+    "code": "2304361",
+    "title": "Linux Administration Lab",
+    "semester": "SEM-V",
+    "academicYear": "2026-27",
+    "type": "Lab",
+    "theme": "emerald",
+    "icon": "flask",
+    "instructor": "Dept. of Computer Engineering",
+    "description": "Hands-on Linux system administration, shell scripting, user management, services, networking, and maintenance tasks.",
+    "links": [
+      {
+        "name": "Lab",
+        "url": "https://moodle.mitaoe.ac.in/course/view.php?id=6557",
+        "badge": "Practical",
+        "type": "lab"
+      }
+    ],
+    "isFavorite": false
+  },
+  {
+    "id": "operating-systems",
+    "code": "2304311",
+    "title": "Operating Systems",
+    "semester": "SEM-V",
+    "academicYear": "2026-27",
+    "type": "Theory + Lab",
+    "theme": "amber",
+    "icon": "cpu",
+    "instructor": "Dept. of Computer Engineering",
+    "description": "Process management, memory and storage systems, scheduling, concurrency, synchronization, and operating system design principles.",
+    "links": [
+      {
+        "name": "Theory",
+        "url": "https://moodle.mitaoe.ac.in/course/view.php?id=6500",
+        "badge": "Lecture",
+        "type": "theory"
+      },
+      {
+        "name": "Lab",
+        "url": "https://moodle.mitaoe.ac.in/course/view.php?id=6501",
+        "badge": "Practical",
+        "type": "lab"
       }
     ],
     "isFavorite": false
